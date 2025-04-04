@@ -5,12 +5,10 @@ const MainContainer = () => {
   const [error, setError] = useState(null);
   const [topGainers, setTopGainers] = useState([]);
   const [topLosers, setTopLosers] = useState([]);
-  const [isLoading, setIsLoading] = useState({
-    gainers: true,
-    losers: true,
-  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const loadTopGainersAndLosers = async () => {
+    setIsLoading(true)
     try {
       const { topGainers, topLosers } = await getTopGainerAndLosers();
       setTopGainers(topGainers)
@@ -19,11 +17,7 @@ const MainContainer = () => {
       console.error("Error fetching data:", error);
       setError(error.message);
     } finally {
-      setIsLoading((prev) => ({
-        ...prev,
-        gainers: false,
-        losers: false
-      }));
+      setIsLoading(() => (false));
     }
   };
 
@@ -34,6 +28,13 @@ const MainContainer = () => {
     fetchData();
   }, [])
 
+  if (isLoading) {
+    return (
+      <div className="loader-overlay">
+        <div className="loader"></div>
+      </div>
+    )
+  }
   return (
     <section className="sub-header">
       {error ? (

@@ -65,7 +65,7 @@ const CryptoChart = () => {
 
   return (
     <>
-      <div className="heading">Cryptocurrency Price Chart (Line Chart)</div>
+      <div className="heading">Cryptocurrency Price Chart</div>
       <div className="button-group-container">
         <div className="name">Crypto Insights</div>
         <div className="buttons">
@@ -84,7 +84,9 @@ const CryptoChart = () => {
 
       <div style={{ maxWidth: '1200px', margin: 'auto', position: "relative", top: "120px" }}>
         {isLoading ? (
-          <div>Loading...</div>
+          <div className="loader-overlay">
+            <div className="loader"></div>
+          </div>
         ) : cryptoDatas ? (
           <ReExt
             xtype="cartesian"

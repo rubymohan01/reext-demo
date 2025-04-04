@@ -7,14 +7,18 @@ import { useNavigate } from "react-router-dom";
 const Table = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
 
   const loadTableData = async () => {
+    setIsLoading(true)
     try {
       const fetchData = await fetchMarketData();
       setData(fetchData);
     } catch (error) {
       console.error("Error fetching All data:", error);
-    }
+    } finally {
+      setIsLoading(false)
+    };
   };
 
   useEffect(() => {
@@ -24,6 +28,13 @@ const Table = () => {
     fetchData();
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="loader-overlay">
+        <div className="loader"></div>
+      </div>
+    )
+  }
   return (
     <>
       <ReExt
