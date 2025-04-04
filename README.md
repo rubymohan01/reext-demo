@@ -83,5 +83,6 @@ Once the setup is complete, the development server will start, and the project s
 
 - **Responsiveness**: The entire web application is fully responsive, ensuring a smooth experience on desktops, tablets, and mobile devices.
 
-I also deployed on vercel but getting some error related reExt licence key
-<span>like this:-</span><img src="./public/deployError.png" width="200" height="150" />
+- **Deployment**:
+  I also deployed on vercel but getting some error related reExt licence key
+  <img src="./public/deployError.png" width="300" height="250" />
