@@ -1,0 +1,73 @@
+.x-dataview-item {
+  border-radius: 15px;
+  margin: 10px;
+  width: calc(33.33% - 20px);
+  max-width: 1200px;
+  display: inline-block;
+  vertical-align: top;
+  background: #fff;
+  box-sizing: border-box;
+}
+.x-dataview-item:hover {
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #5a6f7c;
+  border: none;
+  padding: 15px;
+  border-radius: 15px 15px 0px 0px;
+}
+.crypto-logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.card-name {
+  flex-grow: 1;
+  font-weight: bold;
+  font-size: 16px;
+}
+.crypto-price {
+  color: #eeeeee;
+  font-size: 14px;
+}
+.crypo-name {
+  color: #eeeeee80;
+}
+.card-body {
+  margin: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.crypto-volume {
+  font-size: 14px;
+}
+.volume-label {
+  color: #7f8c8d;
+  display: block;
+  font-size: 12px;
+}
+.crypto-change {
+  font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #5a6f7c;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .x-dataview-item {
+    width: calc(50% - 20px);
+  }
+}
+@media (max-width: 480px) {
+  .x-dataview-item {
+    width: calc(100% - 20px);
+  }
+}
