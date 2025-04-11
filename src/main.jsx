@@ -35,6 +35,9 @@ var ReExtData = {
   location: "remote",
   overrides: false,
 };
+
+window.__IS_REEXT_RUNNING__ = true;
+
 reactroot.render(
   <ReExtProvider
     ReExtData={ReExtData}
