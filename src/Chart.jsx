@@ -57,6 +57,24 @@ const CryptoChart = () => {
     };
 
     fetchData();
+    const removeWatermark = () => {
+      const container = document.querySelector('div[name="ReExtRoot-cartesian"]');
+      console.log(container, "iudsiuiud")
+      if (!container) {
+        console.warn("Container with name 'ReExtRoot-cartesian' not found.");
+        return;
+      }
+
+      const secondDiv = container.children[1];
+      if (secondDiv) {
+        const text = secondDiv.innerText.trim();
+        if (text === "ReExt cartesian") {
+          secondDiv.remove();
+        }
+      }
+    };
+
+    setTimeout(removeWatermark, 200);
 
     return () => {
       isMounted = false;

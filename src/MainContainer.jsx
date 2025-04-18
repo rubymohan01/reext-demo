@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CryptoGrid from "./DetailedCard";
 import { getTopGainerAndLosers } from "./Api";
+import SubHeader from "./SubHeader";
 const MainContainer = () => {
   const [error, setError] = useState(null);
   const [topGainers, setTopGainers] = useState([]);
@@ -36,32 +37,36 @@ const MainContainer = () => {
     )
   }
   return (
-    <section className="sub-header">
-      {error ? (
-        <div className="error-message">
-          Error loadding data: {error}
-        </div>
-      ) : (
-        <>
-          <div>
-            <span style={{
-              color: "#eeeeee",
-              fontSize: "1.75rem",
-              marginLeft: "15px"
-            }}>Top Gainers</span>
-            {topGainers.length > 0 && <CryptoGrid data={topGainers} />}
+    <>
+      <SubHeader />
+      <section className="sub-header">
+        {error ? (
+          <div className="error-message">
+            Error loadding data: {error}
           </div>
-          <div>
-            <span style={{
-              color: "#eeeeee",
-              fontSize: "1.75rem",
-              marginLeft: "15px"
-            }}>Top Losers</span>
-            {topGainers.length > 0 && <CryptoGrid data={topLosers} />}
-          </div>
-        </>
-      )}
-    </section>)
+        ) : (
+          <>
+            <div>
+              <span style={{
+                color: "#eeeeee",
+                fontSize: "1.75rem",
+                marginLeft: "15px"
+              }}>Top Gainers</span>
+              {topGainers.length > 0 && <CryptoGrid data={topGainers} />}
+            </div>
+            <div>
+              <span style={{
+                color: "#eeeeee",
+                fontSize: "1.75rem",
+                marginLeft: "15px"
+              }}>Top Losers</span>
+              {topGainers.length > 0 && <CryptoGrid data={topLosers} />}
+            </div>
+          </>
+        )}
+      </section>
+    </>
+  )
 }
 
 export default MainContainer;

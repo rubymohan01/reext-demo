@@ -1,0 +1,12 @@
+.x-form-type-text {
+  color: white;
+}
+
+/* For the placeholder text */
+.white-text-input input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 1;
+}
+.x-btn-inner-default-small {
+  color: white !important;
+}

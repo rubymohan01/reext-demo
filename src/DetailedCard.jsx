@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../public/card.css";
 import ReExt from "@sencha/reext";
 
 const CryptoGrid = ({ data }) => {
+  useEffect(() => {
+    const removeWatermark = () => {
+      const container = document.querySelectorAll('div[name="ReExtRoot-dataview"]');
+
+      if (!container) {
+        console.warn("Container with name 'ReExtRoot-dataview' not found.");
+        return;
+      }
+
+      container.forEach((div) => {
+        const secondDiv = div.children[1]
+        if (secondDiv) {
+          const text = secondDiv.innerText.trim();
+          if (text === "ReExt dataview") {
+            secondDiv.remove();
+          }
+        }
+      })
+    };
+
+    setTimeout(removeWatermark, 200);
+  }, []);
+
   const cardTemplate = `
     <div >
       <div class="card-header">

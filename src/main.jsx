@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useState, createContext, useContext } from "react";
 import ReactDOM from "react-dom/client";
 import { Fill, ReExtProvider } from "@sencha/reext";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Header from "./Header";
 import MainContainer from "./MainContainer";
-import "./index.css"
-import Table from "./AllCoinTable";
 import "./index.css";
+import Table from "./AllCoinTable";
 import CryptoChart from "./Chart";
-
-
+import LoginContainer from "./LoginContainer";
+const AuthContext = createContext();
+export const useAuth = () => useContext(AuthContext);
 Fill();
 var reactroot = ReactDOM.createRoot(document.getElementById("root"));
 var ReExtData = {
@@ -35,9 +41,43 @@ var ReExtData = {
   location: "remote",
   overrides: false,
 };
-
 window.__IS_REEXT_RUNNING__ = true;
 
+// eslint-disable-next-line react-refresh/only-export-components
+const AppWrapper = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("isAuthenticated") === "true"
+  );
+  const hideHeaderRoutes = ["/login"];
+  const shouldShowHeader = !hideHeaderRoutes.includes(location.pathname);
+  const handleLoginSuccess = () => {
+    localStorage.setItem("isAuthenticated", "true");
+    setIsAuthenticated(true);
+    navigate("/");
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    setIsAuthenticated(false);
+    navigate("/login");
+  };
+  if (!isAuthenticated) {
+    return <LoginContainer onLoginSuccess={handleLoginSuccess} />;
+  }
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, handleLogout }}>
+      <div style={{ minHeight: "100vh", margin: "0px auto" }}>
+        {shouldShowHeader && <Header />}
+        <Routes>
+          <Route path="/" element={<MainContainer />} />
+          <Route path="/dashboard" element={<Table />} />
+          <Route path="/chart/:id" element={<CryptoChart />} />
+        </Routes>
+      </div>
+    </AuthContext.Provider>
+  );
+};
 reactroot.render(
   <ReExtProvider
     ReExtData={ReExtData}
@@ -47,20 +87,8 @@ reactroot.render(
     splash={true}
     style={{ overflow: "auto" }}
   >
-    <Router style={{ overflow: "auto" }}>
-      <div
-        style={{
-          minHeight: "100vh",
-          margin: "0px auto"
-        }}
-      >
-        <Header />
-        <Routes>
-          <Route path="/" element={<MainContainer />} />
-          <Route path="/dashboard" element={<Table />} />
-          <Route path="/chart/:id" element={<CryptoChart />} />
-        </Routes>
-      </div>
+    <Router>
+      <AppWrapper />
     </Router>
   </ReExtProvider>
 );
