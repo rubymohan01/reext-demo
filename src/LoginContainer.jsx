@@ -185,7 +185,7 @@ const LoginContainer = ({ onLoginSuccess }) => {
                   {
                     xtype: 'checkboxfield',
                     name: 'pwdvisible',
-                    boxLabel: 'View Password',
+                    boxLabel: 'Show Password',
                     handler: function () {
                       let pwdField = this.previousSibling();
                       pwdField.inputEl.dom.type = (this.checked) ? 'text' : 'password'

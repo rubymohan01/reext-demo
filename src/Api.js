@@ -18,17 +18,46 @@ export const fetchTrendingData = async () => {
   }
 };
 
-export const fetchMarketData = async () => {
+export const fetchMarketData = async (page) => {
   try {
-    const response = await fetch(
-      "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1"
-    );
+    const url1 =
+      "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1";
+    const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}`;
+
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+        "x-cg-demo-api-key": "CG-zmpnoJX4TvWtzEV5FNAQUVfp",
+      },
+    };
+
+    const response = page ? await fetch(url, options) : await fetch(url1);
     if (!response.ok) throw new Error("Failed to fetch market data");
     const allData = await response.json();
 
     return allData;
   } catch (error) {
     console.error("Error fetching market data:", error);
+    throw error;
+  }
+};
+
+export const fetchTrendData = async () => {
+  try {
+    const response = await fetch(
+      "https://api.coingecko.com/api/v3/search/trending"
+    );
+    if (!response.ok) throw new Error("Failed to fetch trending data");
+    const data = await response.json();
+    console.log(data, "2328938");
+    return data.categories.map((coin) => ({
+      id: coin.id,
+      name: coin.name,
+      data: coin.data,
+    }));
+  } catch (error) {
+    console.error("Error fetching trending data:", error);
     throw error;
   }
 };
