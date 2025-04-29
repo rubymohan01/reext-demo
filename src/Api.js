@@ -50,7 +50,6 @@ export const fetchTrendData = async () => {
     );
     if (!response.ok) throw new Error("Failed to fetch trending data");
     const data = await response.json();
-    console.log(data, "2328938");
     return data.categories.map((coin) => ({
       id: coin.id,
       name: coin.name,
@@ -102,7 +101,7 @@ export const getTopGainerAndLosers = async () => {
 export const getTopLeaders = async () => {
   try {
     const allData = await fetchMarketData();
-    const topLeaders = allData.slice(0, 10).map((coin) => ({
+    const topLeaders = allData.slice(0, 16).map((coin) => ({
       name: coin.name,
       image: coin.image,
       price: coin.current_price,
