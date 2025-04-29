@@ -27,7 +27,7 @@ const Header = () => {
                   }`}
                 onClick={() => setMenuOpen(false)}
               >
-                Explore
+                Home
               </button>
             </Link>
             <Link to="/dashboard">
@@ -36,7 +36,7 @@ const Header = () => {
                   }`}
                 onClick={() => setMenuOpen(false)}
               >
-                Dashboard
+                All Coins
               </button>
             </Link>
             <Link to="/login">

@@ -13,11 +13,15 @@
 
 .heading {
   color: #eeeeee;
-  font-size: 1.75rem;
-  margin: 0 auto;
+  font-size: 1.5rem;
   position: relative;
   top: 100px;
   max-width: 1200px;
+  width: 100%;
+  padding: 10px 15px;
+  margin: 0 auto;
+  border-radius: 10px;
+  align-items: flex-start;
 }
 .button-group-container {
   display: flex;

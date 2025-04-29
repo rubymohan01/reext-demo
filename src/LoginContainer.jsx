@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 const LoginContainer = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
   // const defaultUsername = import.meta.env.VITE_DEFAULT_USERNAME;
   // const defaultPassword = import.meta.env.VITE_DEFAULT_PASSWORD;
@@ -30,6 +31,7 @@ const LoginContainer = ({ onLoginSuccess }) => {
   }, []);
 
   const handleLogin = async (form) => {
+    setIsLoading(true);
     const url = `${apiUrl}/app/login`;
     const formData = form.getValues();
     if (!formData.username.trim() || !formData.password.trim()) {
@@ -58,8 +60,18 @@ const LoginContainer = ({ onLoginSuccess }) => {
     } catch (error) {
       console.error("Login error:", error);
       setMessage('An error occurred during login');
+    } finally{
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="loader-overlay">
+        <div className="loader"></div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -140,7 +152,7 @@ const LoginContainer = ({ onLoginSuccess }) => {
                     placeholder: "Enter your username",
                     allowBlank: false,
                     vytype: 'email',
-                    validation: 'oh No!',
+                    validation: '',
                     width: 300,
                     style: {
                       color: "#000000",
@@ -239,9 +251,9 @@ const LoginContainer = ({ onLoginSuccess }) => {
             ],
           }}
         />
-        {message && (
+        {/* {message && (
           <div style={{ color: "red", marginTop: "10px" }}>{message}</div>
-        )}
+        )} */}
       </div>
     </>
   );

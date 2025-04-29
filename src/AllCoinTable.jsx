@@ -277,7 +277,19 @@ const Table = () => {
         }}
         onSelect={(grid, selected) => {
           const id = selected?.id;
-          navigate(`/chart/${id}`);
+          const serializableData = {
+            id: selected.id,
+            name: selected?.data?.name,
+            price: selected?.data?.current_price,
+            image:selected?.data?.image,
+            low_24h:selected?.data?.low_24h,
+            high_24h:selected?.data?.high_24h,
+            price_change_percentage_24h:selected?.data?.price_change_percentage_24h
+          };
+          
+          navigate(`/chart/${id}`, { 
+            state: { selectedData: serializableData } 
+          });
         }}
       />
     </>

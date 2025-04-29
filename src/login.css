@@ -10,3 +10,7 @@
 .x-btn-inner-default-small {
   color: white !important;
 }
+
+.x-keyboard-mode .x-form-checkbox-focus.x-form-checkbox-default{
+  color: #FFA559 !important;
+}
