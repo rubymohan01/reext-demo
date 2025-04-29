@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import "../public/card.css";
 import ReExt from "@sencha/reext";
+import { useNavigate } from "react-router-dom";
 
 const CryptoGrid = ({ data }) => {
+  const navigate = useNavigate();
   useEffect(() => {
     const removeWatermark = () => {
       const container = document.querySelectorAll('div[name="ReExtRoot-dataview"]');
@@ -52,7 +54,7 @@ const CryptoGrid = ({ data }) => {
     <>
       <ReExt
         xtype="dataview"
-        style={{ height: '100%', margin: "20px", overflow: 'auto' }}
+        style={{ height: '100%', margin: "20px", overflow: 'auto', cursor:"pointer" }}
         config={{
           store: {
             data: data,
@@ -62,6 +64,26 @@ const CryptoGrid = ({ data }) => {
                 type: 'json',
               },
             },
+          },
+          listeners:{
+            "itemclick": function(dataview, record) {
+              console.log(record,"iddd")
+            
+                const serializableData = {
+                  id: record.id,
+                  name: record?.data?.name,
+                  price: record?.data?.price,
+                  image:record?.data?.image,
+                  low_24h:record?.data?.low_24h,
+                  high_24h:record?.data?.high_24h,
+                  price_change_percentage_24h:record?.data?.price_change_percentage_24h
+                };
+                navigate(`/chart/${record?.id}`,
+                   { 
+                  state: { selectedData: serializableData } 
+                }
+              );
+              }
           },
           itemTpl: cardTemplate,
           emptyText: '<p style="text-align: center; padding: 20px;">Loading...</p>',

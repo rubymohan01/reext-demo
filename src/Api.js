@@ -71,24 +71,32 @@ export const getTopGainerAndLosers = async () => {
       .filter((coin) => coin.price_change_percentage_24h > 0)
       .slice(0, 6)
       .map((coin) => ({
+        id: coin?.id,
         name: coin.name,
         image: coin.image,
         price: coin.current_price,
         symbol: coin.symbol.toUpperCase(),
         volume: coin.total_volume,
+        high_24h:coin.high_24h,
+        low_24h:coin.low_24h,
         changePer24h: coin.price_change_percentage_24h,
+        price_change_percentage_24h:coin.price_change_percentage_24h
       }));
 
     const topLosers = sortedCoins
       .filter((coin) => coin.price_change_percentage_24h < 0)
       .slice(0, 6)
       .map((coin) => ({
+        id: coin?.id,
         name: coin.name,
         image: coin.image,
         price: coin.current_price,
         symbol: coin.symbol.toUpperCase(),
         volume: coin.total_volume,
+        high_24h:coin.high_24h,
+        low_24h:coin.low_24h,
         changePer24h: coin.price_change_percentage_24h,
+        price_change_percentage_24h:coin.price_change_percentage_24h
       }));
 
     return { topGainers, topLosers };

@@ -54,6 +54,21 @@ const Table = () => {
     }
   };
 
+  const handleChartClick = (record) => {
+    const serializableData = {
+      id: record.id,
+      name: record.name,
+      price: record.current_price,
+      image: record.image,
+      low_24h: record.low_24h,
+      high_24h: record.high_24h,
+      price_change_percentage_24h: record.price_change_percentage_24h,
+    };
+    navigate(`/chart/${record.id}`, {
+      state: { selectedData: serializableData },
+    });
+  };
+
   const categoriesData = async () => {
     try {
       const fetchData = await fetchTrendData();
@@ -183,6 +198,30 @@ const Table = () => {
                 <span style="font-size: 10px; color: #eeeeee80;">Low: $${low_24h}</span>`;
               },
             },
+            {
+              text: "Action",
+              xtype: "widgetcolumn",
+              flex: .7,
+              widget: {
+                xtype: "button",
+                text: "View Chart",
+                style: {
+                  padding: "10px",
+                  marginTop:"8px",
+                  borderRadius: "4px",
+                  backgroundColor: "#FFA559",
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  maxWidth:"120px"
+                },
+                handler: function (button) {
+                  const record = button.getWidgetRecord();
+                  handleChartClick(record.data);
+                },
+              },
+            },
           ],
           store: {
             data: displayData,
@@ -274,22 +313,6 @@ const Table = () => {
               beforechange: handlePageChange
             }
           }
-        }}
-        onSelect={(grid, selected) => {
-          const id = selected?.id;
-          const serializableData = {
-            id: selected.id,
-            name: selected?.data?.name,
-            price: selected?.data?.current_price,
-            image:selected?.data?.image,
-            low_24h:selected?.data?.low_24h,
-            high_24h:selected?.data?.high_24h,
-            price_change_percentage_24h:selected?.data?.price_change_percentage_24h
-          };
-          
-          navigate(`/chart/${id}`, { 
-            state: { selectedData: serializableData } 
-          });
         }}
       />
     </>

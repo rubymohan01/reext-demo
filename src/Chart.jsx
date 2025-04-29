@@ -134,7 +134,7 @@ const CryptoChart = () => {
               style={{
                 fontWeight: "bold",
                 marginBottom: "20px",
-                color: "#eeeeee",
+                color: "#ffa559",
               }}
             >
               {selectedData?.name}
