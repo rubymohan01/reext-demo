@@ -4,9 +4,9 @@ import CryptoChart from "../Chart";
 const coinOptions = [
   { label: "Lido Staked Ether", value: "staked-ether" },
   { label: "Ethereum", value: "ethereum" },
-  { label: "Cardano", value: "cardano" },
+  { label: "Bitcoin Cash", value: "bitcoin-cash" },
   { label: "Solana", value: "solana" },
-  { label: "pendle", value: "pendle" },
+  { label: "Wrapped BNB", value: "wbnb" },
   { label: "Restaked Swell ETH", value: "restaked-swell-eth" },
   { label: "litecoin", value: "litecoin" },
   { label: "monero", value: "monero" }
