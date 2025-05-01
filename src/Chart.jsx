@@ -1,5 +1,5 @@
 import ReExt from "@sencha/reext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
 const CryptoChart = (compareId) => {
@@ -12,6 +12,10 @@ const CryptoChart = (compareId) => {
   const [chartInterval, setChartInterval] = useState("30");
   const [isLoading, setIsLoading] = useState(false);
   const [price, setPrice] = useState(selectedData?.price)
+
+  const chartKey = useMemo(() => {
+    return `${chartInterval}-${cryptoDatas.length}-${secondCryptoDatas.length}`;
+  }, [chartInterval, cryptoDatas, secondCryptoDatas]);
 
   const intervalOptions = [
     { label: "7 Days", value: "7" },
@@ -111,7 +115,7 @@ const CryptoChart = (compareId) => {
       console.log(cryptoDatas, "2345")
       setCryptoDatas(prevData => {
         const lastTimestamp = prevData.length > 0 ? prevData[prevData.length - 1][0] : Date.now();
-        const nextTimestamp = lastTimestamp + 24 * 60 * 60 * 1000; // Add 30 minutes
+        const nextTimestamp = lastTimestamp + 30 * 60 * 1000;
         return [...prevData, [nextTimestamp, newPrice]];
       });
 
@@ -280,7 +284,7 @@ const CryptoChart = (compareId) => {
         ) : cryptoDatas ? (
           <ReExt
             xtype="cartesian"
-            key={chartInterval}
+            key={chartInterval === "7" && chartKey}
             config={{
               width: "100%",
               height: "70vh",

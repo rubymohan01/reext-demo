@@ -207,14 +207,14 @@ const Table = () => {
                 text: "View Chart",
                 style: {
                   padding: "10px",
-                  marginTop:"8px",
+                  marginTop: "8px",
                   borderRadius: "4px",
                   backgroundColor: "#FFA559",
                   color: "white",
                   border: "none",
                   cursor: "pointer",
                   fontSize: "14px",
-                  maxWidth:"120px"
+                  maxWidth: "120px"
                 },
                 handler: function (button) {
                   const record = button.getWidgetRecord();
