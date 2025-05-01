@@ -18,6 +18,8 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .header-icon {
@@ -40,7 +42,6 @@
   background-color: transparent;
   border: none;
   font-size: 1.25rem;
-  width: 100px;
   margin: 10px 0px 0px 1rem;
 }
 

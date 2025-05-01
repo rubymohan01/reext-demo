@@ -7,9 +7,9 @@ const Cards = ({ data }) => {
   const scrollLeft = () => {
     if (carouselRef.current) {
       const scroller = carouselRef.current.querySelector('[role="presentation"]');
-      const scrollWidth = Math.floor(scroller.clientWidth / 300);
+      const scrollWidth = (scroller.clientWidth / 300);
       if (scroller) {
-        scroller.scrollBy({ left: -scrollWidth * 300, behavior: 'smooth' });
+        scroller.scrollBy({ left: -(scrollWidth * 300) + 20, behavior: 'smooth' });
       }
     }
   };
@@ -56,7 +56,7 @@ const Cards = ({ data }) => {
 
   return (
     <div ref={carouselRef} style={{ display: 'flex', alignItems: 'center', maxHeight: '147px', minHeight: '147px' }}>
-      <img onClick={scrollLeft} src={"/left-arrow.png"} />
+      <img onClick={scrollLeft} style={{ cursor: "pointers" }} src={"/left-arrow.png"} />
       <ReExt
         xtype="container"
         style={{
@@ -86,7 +86,7 @@ const Cards = ({ data }) => {
           })),
         }}
       />
-      <img onClick={scrollRight} src={"/right-arrow.png"} />
+      <img onClick={scrollRight} style={{ cursor: "pointers" }} src={"/right-arrow.png"} />
     </div>
   );
 };

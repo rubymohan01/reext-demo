@@ -12,8 +12,10 @@ const Header = () => {
     <>
       <header className="header">
         <div className="header-left">
-          <img src={"/growth.png"} alt="Site Icon" className="header-icon" />
-          <span className="header-title">CryptoInsights</span>
+          <div>
+            <img src={"/growth.png"} alt="Site Icon" className="header-icon" />
+            <span className="header-title">CryptoInsights</span>
+          </div>
           <img
             src="/hamburger.png"
             className="hamburger-menu"
@@ -37,6 +39,15 @@ const Header = () => {
                 onClick={() => setMenuOpen(false)}
               >
                 All Coins
+              </button>
+            </Link>
+            <Link to="/comparison">
+              <button
+                className={`header-btn ${location.pathname === "/comparison" ? "active-tab" : ""
+                  }`}
+                onClick={() => setMenuOpen(false)}
+              >
+                Coins Compares
               </button>
             </Link>
             <Link to="/login">

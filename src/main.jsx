@@ -14,6 +14,7 @@ import "./index.css";
 import Table from "./AllCoinTable";
 import CryptoChart from "./Chart";
 import LoginContainer from "./LoginContainer";
+import CompareCoins from "./Comparison/CompareCoins";
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 Fill();
@@ -72,6 +73,7 @@ const AppWrapper = () => {
         <Routes>
           <Route path="/" element={<MainContainer />} />
           <Route path="/dashboard" element={<Table />} />
+          <Route path="/comparison" element={<CompareCoins />} />
           <Route path="/chart/:id" element={<CryptoChart />} />
         </Routes>
       </div>

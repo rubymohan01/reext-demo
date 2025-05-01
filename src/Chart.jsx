@@ -2,13 +2,16 @@ import ReExt from "@sencha/reext";
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 
-const CryptoChart = () => {
-  const { id } = useParams();
+const CryptoChart = (compareId) => {
+  const { id: routeId } = useParams();
+  const id = compareId?.id ?? routeId;
   const location = useLocation();
-  const [cryptoDatas, setCryptoDatas] = useState(null);
+  const [cryptoDatas, setCryptoDatas] = useState([]);
+  const [secondCryptoDatas, setSecondCryptoDatas] = useState([]);
   const selectedData = location.state?.selectedData;
   const [chartInterval, setChartInterval] = useState("30");
   const [isLoading, setIsLoading] = useState(false);
+  const [price, setPrice] = useState(selectedData?.price)
 
   const intervalOptions = [
     { label: "7 Days", value: "7" },
@@ -25,7 +28,7 @@ const CryptoChart = () => {
   useEffect(() => {
     let isMounted = true;
 
-    const getChartData = async () => {
+    const getChartData = async (id) => {
       try {
         setIsLoading(true);
         const url = `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${chartInterval}&interval<daily&precision=3`;
@@ -52,18 +55,26 @@ const CryptoChart = () => {
     };
 
     const fetchData = async () => {
-      const data = await getChartData();
-      if (isMounted) {
-        setCryptoDatas(data);
+      if (compareId?.id) {
+        const data = await getChartData(id[0]);
+        const data2 = await getChartData(id[1]);
+        if (isMounted) {
+          setCryptoDatas(data);
+          setSecondCryptoDatas(data2)
+        }
       }
-    };
-
+      else {
+        const data = await getChartData(id);
+        if (isMounted) {
+          setCryptoDatas(data);
+        }
+      };
+    }
     fetchData();
     const removeWatermark = () => {
       const container = document.querySelector(
         'div[name="ReExtRoot-cartesian"]'
       );
-      console.log(container, "iudsiuiud");
       if (!container) {
         console.warn("Container with name 'ReExtRoot-cartesian' not found.");
         return;
@@ -83,139 +94,168 @@ const CryptoChart = () => {
     return () => {
       isMounted = false;
     };
-  }, [chartInterval, id]);
+  }, [chartInterval, id, compareId]);
+
+  useEffect(() => {
+    if (!selectedData?.price) return;
+
+    const updatePrice = () => {
+      // console.log(cryptoDatas, "2342")
+      const currentPrice = parseFloat(price);
+      const change = (Math.random() * 0.1 - 0.05).toFixed(2);
+      let newPrice = currentPrice + parseFloat(change);
+
+      newPrice = parseFloat(Math.max(newPrice, 0).toFixed(2));
+
+      setPrice(newPrice);
+      console.log(cryptoDatas, "2345")
+      setCryptoDatas(prevData => {
+        const lastTimestamp = prevData.length > 0 ? prevData[prevData.length - 1][0] : Date.now();
+        const nextTimestamp = lastTimestamp + 24 * 60 * 60 * 1000; // Add 30 minutes
+        return [...prevData, [nextTimestamp, newPrice]];
+      });
+
+      const randomInterval = [2000, 3000, 5000][Math.floor(Math.random() * 3)];
+      timeoutRef = setTimeout(updatePrice, randomInterval);
+    };
+
+    let timeoutRef = setTimeout(updatePrice, 2000);
+
+    return () => clearTimeout(timeoutRef);
+  }, [price, selectedData?.price]);
 
   return (
     <>
-      <div
-        className="heading"
-        style={{
-          color: "#eeeeee",
-          fontSize: "1.5rem",
-          position: "relative",
-          top: "100px",
-          maxWidth: "1200px",
-          width: "100%",
-          padding: "10px 15px",
-          margin: "0 auto",
-          borderRadius: "10px",
-          display: "flex",
-          justifyContent: "space-between", // This will space out the left and right sections
-          alignItems: "flex-start",
-          gap: "16px",
-        }}
-      >
-        {/* Left section - Coin details */}
-        <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-          <div
-            style={{
-              width: "60px",
-              height: "60px",
-              borderRadius: "50%",
-              backgroundColor: "white",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              overflow: "hidden",
-            }}
-          >
-            <img
-              src={selectedData?.image}
-              alt="none"
-              style={{
-                width: "80%",
-                height: "80%",
-                objectFit: "cover",
-              }}
-            />
-          </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <span
-              style={{
-                fontWeight: "bold",
-                marginBottom: "20px",
-                color: "#ffa559",
-              }}
-            >
-              {selectedData?.name}
-            </span>
-            <span style={{ color: "#eeeeee" }}>${selectedData?.price}</span>
-          </div>
-        </div>
-
-        {/* Right section - Hour price */}
+      {!compareId?.id &&
         <div
+          className="heading"
           style={{
+            color: "#eeeeee",
+            fontSize: "1.5rem",
+            position: "relative",
+            top: "100px",
+            maxWidth: "1200px",
+            width: "100%",
+            padding: "10px 15px",
+            margin: "0 auto",
+            borderRadius: "10px",
             display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end",
-            gap: "15px",
-            marginRight:"10px "
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            gap: "16px",
           }}
         >
-          <div style={{ display: "flex", gap: "8px", 
-              fontSize: "1rem",
-
-           }}>
-            <span style={{fontSize:"1rem", fontWeight:"bold", marginTop:"3px"}} >24h</span>
-            <img
-              src="/high.png"
-              alt="icon"
+          {/* Left section - Coin details */}
+          <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+            <div
               style={{
-                width: "24px",
-                height: "24px",
-                objectFit: "cover",
-                borderRadius: "4px",
+                width: "60px",
+                height: "60px",
+                borderRadius: "50%",
+                backgroundColor: "white",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                overflow: "hidden",
               }}
-            />
-            <span
-            style={{marginTop:"3px"}}
-            > ${selectedData?.high_24h}</span>
-
-          
+            >
+              <img
+                src={selectedData?.image}
+                alt="none"
+                style={{
+                  width: "80%",
+                  height: "80%",
+                  objectFit: "cover",
+                }}
+              />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  marginBottom: "20px",
+                  color: "#ffa559",
+                }}
+              >
+                {selectedData?.name}
+              </span>
+              <span style={{ color: "#eeeeee" }}>${price}</span>
+            </div>
           </div>
+
+          {/* Right section - Hour price */}
           <div
             style={{
               display: "flex",
-              gap: "8px",
-              fontSize: "1rem",
-              // color: "#aaaaaa",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              gap: "15px",
+              marginRight: "10px "
             }}
           >
-            <span style={{fontSize:"1rem", fontWeight:"bold", marginTop:"3px"}} >24h</span>
+            <div style={{
+              display: "flex", gap: "8px",
+              fontSize: "1rem",
+
+            }}>
+              <span style={{ fontSize: "1rem", fontWeight: "bold", marginTop: "3px" }} >24h</span>
+              <img
+                src="/high.png"
+                alt="icon"
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  objectFit: "cover",
+                  borderRadius: "4px",
+                }}
+              />
+              <span
+                style={{ marginTop: "3px" }}
+              > ${selectedData?.high_24h}</span>
+
+
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: "8px",
+                fontSize: "1rem",
+                // color: "#aaaaaa",
+              }}
+            >
+              <span style={{ fontSize: "1rem", fontWeight: "bold", marginTop: "3px" }} >24h</span>
 
               <img
-              src="/low.png"
-              alt="icon"
-              style={{
-                width: "24px",
-                height: "24px",
-                objectFit: "cover",
-                borderRadius: "4px",
-              }}
-            />
-            <span
-            style={{marginTop:"3px"}}
-            
-            > ${selectedData?.low_24h} 
-            
-            </span>
-          </div>
-          <div
-          style={{color:selectedData?.price_change_percentage_24h < 0 ? "#E74C3C":"#27AE60", fontSize:"1rem"}}
-          >({selectedData?.price_change_percentage_24h}%)</div>
-        </div>
-      </div>
+                src="/low.png"
+                alt="icon"
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  objectFit: "cover",
+                  borderRadius: "4px",
+                }}
+              />
+              <span
+                style={{ marginTop: "3px" }}
 
+              > ${selectedData?.low_24h}
+
+              </span>
+            </div>
+            <div
+              style={{ color: selectedData?.price_change_percentage_24h < 0 ? "#E74C3C" : "#27AE60", fontSize: "1rem" }}
+            >({selectedData?.price_change_percentage_24h}%)</div>
+          </div>
+        </div>
+      }
       <div className="button-group-container">
         <div className="name">Crypto Insights</div>
         <div className="buttons">
           {intervalOptions.map((option) => (
             <button
               key={option.value}
-              className={`button ${
-                chartInterval === option.value ? "selected" : ""
-              }`}
+              className={`button ${chartInterval === option.value ? "selected" : ""
+                }`}
               onClick={() => handleButtonClick(option.value)}
               disabled={isLoading}
             >
@@ -247,11 +287,16 @@ const CryptoChart = () => {
               marginBottom: "20px",
               background: "#5a6f7c",
               store: {
-                fields: ["time", "price"],
-                data: cryptoDatas.map((item) => ({
+                fields: compareId?.id ? ["time", "price1", "price2"] : ["time", "price"],
+                data: compareId?.id ? cryptoDatas.map((item, index) => ({
                   time: new Date(item[0]),
-                  price: item[1],
-                })),
+                  price1: item[1],
+                  price2: secondCryptoDatas[index]?.[1] || 0,
+                })) :
+                  cryptoDatas.map((item) => ({
+                    time: new Date(item[0]),
+                    price: item[1],
+                  })),
               },
               theme: "blue",
               axes: [
@@ -274,18 +319,58 @@ const CryptoChart = () => {
                 {
                   type: "numeric",
                   position: "left",
-                  fields: ["price"],
+                  fields: compareId?.id ? ["price1", "price2"] : ["price"],
                   title: "Price (USD)",
                   renderer: (axis, label) => `$${label.toFixed(2)}`,
                   increment: 10000,
                 },
               ],
-              series: [
+              series: compareId?.id ? [
+                {
+                  type: "line",
+                  xField: "time",
+                  yField: "price1",
+                  style: {
+                    stroke: "#32CD32",
+                    lineWidth: 2,
+                  },
+                  highlight: true,
+                  tooltip: {
+                    trackMouse: true,
+                    renderer: (tooltip, record) => {
+                      const time = record.get("time").toLocaleDateString();
+                      const price = record.get("price1");
+                      tooltip.setHtml(
+                        `Date: ${time}<br>${id[0]}Price: $${price.toFixed(2)}`
+                      );
+                    },
+                  },
+                },
+                {
+                  type: "line",
+                  xField: "time",
+                  yField: "price2",
+                  style: {
+                    stroke: "#FF4500",
+                    lineWidth: 2,
+                  },
+                  highlight: true,
+                  tooltip: {
+                    trackMouse: true,
+                    renderer: (tooltip, record) => {
+                      const time = record.get("time").toLocaleDateString();
+                      const price = record.get("price2");
+                      tooltip.setHtml(
+                        `Date: ${time}<br>${id[1]} Price: $${price.toFixed(2)}`
+                      );
+                    },
+                  },
+                },
+              ] : [
                 {
                   type: "line",
                   xField: "time",
                   yField: "price",
-                  title: "Bitcoin Price",
                   style: {
                     stroke: "#32CD32",
                     lineWidth: 2,
@@ -296,9 +381,7 @@ const CryptoChart = () => {
                     renderer: (tooltip, record) => {
                       const time = record.get("time").toLocaleDateString();
                       const price = record.get("price");
-                      tooltip.setHtml(
-                        `Date: ${time}<br>Price: $${price.toFixed(2)}`
-                      );
+                      tooltip.setHtml(`Date: ${time}<br>${id}Price: $${price.toFixed(2)}`);
                     },
                   },
                 },
