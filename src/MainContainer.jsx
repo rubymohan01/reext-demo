@@ -42,7 +42,8 @@ const MainContainer = () => {
       <section className="sub-header">
         {error ? (
           <div className="error-message">
-            Error loadding data: {error}
+            {/* Error loadding data: {error} */}
+            ""
           </div>
         ) : (
           <>

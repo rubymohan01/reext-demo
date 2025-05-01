@@ -393,7 +393,14 @@ const CryptoChart = (compareId) => {
             }}
           />
         ) : (
-          <div>No data available</div>
+          <div
+          style={{
+            textAlign: "center",
+            color: "#eeeeee",
+            fontSize: "1.2rem",
+            padding: "200px 0"
+          }}
+          >Too many Request found. Please try again after a minute</div>
         )}
       </div>
     </>

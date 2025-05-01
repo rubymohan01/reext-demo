@@ -14,9 +14,9 @@ const coinOptions = [
 ];
 
 const CompareCoins = () => {
-  const [selectedCoin1, setSelectedCoin1] = useState("bitcoin");
-  const [selectedCoin2, setSelectedCoin2] = useState("ethereum");
-  const [comparedCoins, setComparedCoins] = useState([]);
+  const [selectedCoin1, setSelectedCoin1] = useState("bitcoin-cash");
+  const [selectedCoin2, setSelectedCoin2] = useState("monero");
+  const [comparedCoins, setComparedCoins] = useState(["bitcoin-cash", "monero"]);
 
   const handleCompare = () => {
     if (selectedCoin1 !== selectedCoin2) {

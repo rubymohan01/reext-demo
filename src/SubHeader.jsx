@@ -112,7 +112,14 @@ const SubHeader = () => {
   return (
     <section className="sub-header">
       {error ? (
-        <div className="error-message">Error loading data: {error}</div>
+        <div 
+        style={{
+          textAlign: "center",
+          color: "#eeeeee",
+          fontSize: "1.2rem",
+          padding: "200px 0"
+        }}
+        >Error loading data: {error}</div>
       ) : (
         <>
           <ReExt

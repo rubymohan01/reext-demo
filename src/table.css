@@ -49,6 +49,8 @@
 .buttons {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 /* Button default styles */
@@ -65,7 +67,7 @@
 
 /* Button selected state */
 .button.selected {
-  background-color: #4caf50; /* Green color for selected button */
+  background-color: #ffa559;
   color: white;
 }
 
@@ -88,6 +90,7 @@
   z-index: 9999;
   pointer-events: all;
 }
+
 .loader {
   border: 6px solid #f3f3f3;
   border-top: 6px solid #ffa559;
@@ -96,6 +99,7 @@
   height: 60px;
   animation: spin 0.8s linear infinite;
 }
+
 .x-field-focus,
 .x-form-item-label {
   color: #ffa559 !important;
@@ -108,5 +112,64 @@
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .heading {
+    font-size: 1rem;
+    top: 60px;
+    padding: 8px 10px;
+    /* flex-direction: column; */
+    margin-top: 20px;
+    gap: 5px;
+  }
+
+  .button-group-container {
+    top: 80px;
+    padding: 8px;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+
+  .buttons {
+    width: 100%;
+    justify-content: space-between;
+    gap: 4px;
+  }
+
+  .button {
+    padding: 6px 10px;
+    font-size: 9px;
+    border-radius: 15px;
+  }
+
+  .x-field-focus,
+  .x-form-item-label {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+ 
+  .button-group-container {
+    top: 107px;
+  }
+
+  .heading{
+    margin-bottom: 20px;
+  }
+  .buttons {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .button {
+    flex-shrink: 0;
+    padding: 4px 8px;
+    font-size: 8px;
   }
 }
