@@ -1,92 +1,76 @@
-import React, { useRef } from 'react';
-import ReExt from '@sencha/reext';
+import React, { useRef, useEffect, useState } from 'react';
+import './card.css';
 
 const Cards = ({ data }) => {
   const carouselRef = useRef(null);
+  const [visibleCards, setVisibleCards] = useState(1); // Default to mobile view
 
-  const scrollLeft = () => {
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      
+      if (width <= 576) { // Mobile
+        setVisibleCards(2);
+      } else if (width <= 768) { // Small tablets
+        setVisibleCards(1.5); // Show 1.5 cards (peek at next)
+      } else if (width <= 1024) { // Tablets/iPads
+        setVisibleCards(2.5); // Show 2.5 cards (peek at third)
+      } else { // Desktop
+        setVisibleCards(4); // Show 4 cards
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const scroll = (direction) => {
     if (carouselRef.current) {
-      const scroller = carouselRef.current.querySelector('[role="presentation"]');
-      const scrollWidth = (scroller.clientWidth / 300);
-      if (scroller) {
-        scroller.scrollBy({ left: -(scrollWidth * 300) + 20, behavior: 'smooth' });
+      const cardElement = carouselRef.current.querySelector('.card');
+      if (cardElement) {
+        const cardWidth = cardElement.offsetWidth + 10; // Include gap
+        const scrollAmount = cardWidth * (direction === 'left' ? -1 : 1);
+        carouselRef.current.scrollBy({
+          left: scrollAmount,
+          behavior: 'smooth'
+        });
       }
     }
   };
 
-  const scrollRight = () => {
-    if (carouselRef.current) {
-      const scroller = carouselRef.current.querySelector('[role="presentation"]');
-      const scrollWidth = Math.floor(scroller.clientWidth / 300);
-      if (scroller) {
-        scroller.scrollBy({ left: scrollWidth * 300, behavior: 'smooth' });
-      }
-    }
-  };
-
-
-  const renderCryptoCardItems = (crypto) => [
-    {
-      xtype: 'container',
-      html: `
-        <div style="background-color: #5a6f7c; color: #eeeeee; border-radius: 15px; display: flex; align-items: center; padding: 10px; height: 80px;">
-          <img src="${crypto.image || ''}" width="40" height="40" style="vertical-align: middle; border-radius: 50%" />
-          <div style="display: flex; font-size: 1rem; flex-direction: column; flex: 1">
-            <span style="margin-left: 10px; font-weight: 700; padding: 5px 2px; text-overflow: ellipsis; max-width: 150px; overflow: hidden;">
-              ${crypto.name || 'Unknown'}
-            </span>
-            <span style="margin-left: 10px; padding: 5px 2px; color: #eeeeee80">
-              ${crypto.symbol || ''}
-            </span>
-          </div>
-          <div style="display: flex; font-size: 1rem; flex-direction: column; flex: 1">
-            <span style="margin-left: 10px; font-weight: 700; font-size: 1rem; align-self: flex-start; margin: 10px">
-              ${crypto.price || 'N/A'}
-            </span>
-          </div>
-        </div>
-      `,
-      flex: 1,
-    },
-  ];
-
-  if (!data || !Array.isArray(data) || data.length === 0) {
-    return <div style={{ color: 'white', margin: '30px 20px' }}>No data available</div>;
+  if (!data?.length) {
+    return <div className="no-data">No data available</div>;
   }
 
   return (
-    <div ref={carouselRef} style={{ display: 'flex', alignItems: 'center', maxHeight: '147px', minHeight: '147px' }}>
-      <img onClick={scrollLeft} style={{ cursor: "pointers" }} src={"/left-arrow.png"} />
-      <ReExt
-        xtype="container"
+    <div className="cards-container">
+      <button className="scroll-button left" onClick={() => scroll('left')}>
+        <img src="/left-arrow.png" alt="Scroll left" />
+      </button>
+
+      <div 
+        className="cards-carousel" 
+        ref={carouselRef}
         style={{
-          maxHeight: '147px',
-          minHeight: '147px',
-          flex: 1,
+          '--visible-cards': visibleCards
         }}
-        config={{
-          layout: 'hbox',
-          scrollable: 'horizontal',
-          style: {
-            margin: '30px 0',
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': { display: 'none' },
-            overflowX: 'auto',
-            whiteSpace: 'nowrap',
-          },
-          items: data.map((crypto, index) => ({
-            xtype: 'panel',
-            maxBlockSize: 'max-content',
-            layout: 'hbox',
-            margin: '0 10',
-            width: 300,
-            key: index,
-            style: { cursor: 'pointer' },
-            items: renderCryptoCardItems(crypto),
-          })),
-        }}
-      />
-      <img onClick={scrollRight} style={{ cursor: "pointers" }} src={"/right-arrow.png"} />
+      >
+        {data.map((crypto, index) => (
+          <div key={index} className="card">
+            <img src={crypto.image} alt={crypto.name} className="crypto-image" />
+            <div className="crypto-info">
+              <span className="crypto-name">{crypto.name || 'Unknown'}</span>
+              <span className="crypto-symbol">{crypto.symbol || ''}</span>
+            </div>
+            <div className="crypto-price">{crypto.price || 'N/A'}</div>
+          </div>
+        ))}
+      </div>
+
+      <button className="scroll-button right" onClick={() => scroll('right')}>
+        <img src="/right-arrow.png" alt="Scroll right" />
+      </button>
     </div>
   );
 };

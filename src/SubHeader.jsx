@@ -112,14 +112,51 @@ const SubHeader = () => {
   return (
     <section className="sub-header">
       {error ? (
-        <div 
-        style={{
-          textAlign: "center",
-          color: "#eeeeee",
+       <div style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "60vh",
+        padding: "20px",
+        borderRadius: "12px",
+        color: "#eeeeee",
+        textAlign: "center",
+        margin: "20px 0"
+      }}>
+        <div style={{
+          fontSize: "3rem",
+          marginBottom: "20px",
+          color: "#ff4757"
+        }}>
+          ⚠️
+        </div>
+        <p style={{
           fontSize: "1.2rem",
-          padding: "200px 0"
-        }}
-        >Error loading data: {error}</div>
+          marginBottom: "25px",
+          maxWidth: "500px",
+          lineHeight: "1.6",
+          color: "#b8b8b8"
+        }}>
+          Too many requests! Please wait a minute before trying again.
+        </p>
+        <button style={{
+          padding: "12px 24px",
+          backgroundColor: "#ffa559",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          fontSize: "1rem",
+          cursor: "pointer",
+          transition: "all 0.3s ease",
+          ":hover": {
+            backgroundColor: "#ffa559",
+            transform: "translateY(-2px)"
+          }
+        }} onClick={() => window.location.reload()}>
+          Refresh after a minute
+        </button>
+      </div>
       ) : (
         <>
           <ReExt

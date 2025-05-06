@@ -1,0 +1,127 @@
+:root {
+    --card-width: calc((100% - (var(--gap) * (var(--visible-cards) - 1))) / var(--visible-cards));
+    --gap: 10px;
+  }
+  
+  .cards-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    padding: 20px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .scroll-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+  
+  .scroll-button img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .cards-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    gap: var(--gap);
+    padding: 0 2px;
+    scrollbar-width: none;
+  }
+  
+  .cards-carousel::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .card {
+    scroll-snap-align: start;
+    flex: 0 0 var(--card-width);
+    background-color: #5a6f7c;
+    color: #eeeeee;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    height: 80px;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  
+  .crypto-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .crypto-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .crypto-name {
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .crypto-symbol {
+    color: rgba(238, 238, 238, 0.5);
+    font-size: 0.9em;
+  }
+  
+  .crypto-price {
+    font-weight: 700;
+    margin-left: 10px;
+    white-space: nowrap;
+  }
+  
+  .no-data {
+    color: white;
+    margin: 30px 20px;
+    text-align: center;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 490px) {
+    .card {
+      min-width: calc(103% - 10px);
+    }
+    .cards-carousel {
+        padding: 0 0px;
+    }
+  }
+  
+  @media (min-width: 491px) and (max-width: 768px) {
+    /* Small tablets - show 1.5 cards */
+    .card {
+      min-width: calc((100% / 2) - (var(--gap) * 0.4));
+    }
+  }
+  
+  @media (min-width: 769px) and (max-width: 1024px) {
+    /* Tablets/iPads - show 2.5 cards */
+    .card {
+      min-width: calc((100% / 3) - (var(--gap) * 1 / 1.8));
+    }
+  }
+  
+  @media (min-width: 1025px) {
+    /* Desktop - show 4 cards */
+    .card {
+      min-width: calc((100% / 4) - (var(--gap) * 3 / 4.3));
+    }
+  }
